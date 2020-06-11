@@ -1,0 +1,17 @@
+body{
+    padding-top:5px;
+}
+.menuVertical{
+    height: 95vh;
+    border-top-left-radius: 35px;
+    border-bottom-left-radius: 35px;
+}
+nav{
+    margin-top: 5px !important;
+    height: 93%;
+    
+}
+.container-menu{
+    padding-top: 0.5%;
+    padding-bottom: 1%;
+}
