@@ -1,0 +1,15 @@
+Les étapes pour tester le projet danger vieux, 
+-il faut cloner le depôt. 
+-ensuite creer une base de données du nom de "bd_dangerview".
+-implorter le fichier sql dans la base de données.
+-pour la première connexion utiliser Email : tean.koya@gmail.com et Mot de passe : ko1GQKAMnY5Xydz
+- Creer votre propre Administrateur et deconnecter puis reconnecter vous avec vos accès et tester l'application.
+
+
+Consigne
+
+-Avant d'ajouter une ville rassurer vous que le Pays qui la contient existe sinon aller ajouter le pays dans l'ongler ajouter Pays
+-Avant d'ajouter un  quartier rassurer vous que la ville qui le contient existe sinon aller ajouter la ville dans l'ongler ajouter ville
+-Avant d'ajouter un lieu ou une zone rassurer vous que le quartier qui le contient existe sinon aller ajouter le quartier dans l'ongler ajouter quartier
+
+
