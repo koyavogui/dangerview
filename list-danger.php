@@ -11,9 +11,18 @@
     <link rel="stylesheet" href="style/style-admin.css">
     <title>Tableau de bord - liste Utilisateur </title>
 </head>
-<body>
-    <?php include('menu.php'); ?>
-    <?php include('table/danger.php')?>
+<?php 
+        switch ($_SESSION['typeUtilisateur']) {
+            case 'Administrateur':
+                echo'<body class="corp">';
+                include('menu.php');
+                break;
+            case 'Operateur':
+                echo'<body class="corp-op">';
+                include('menu-operateur.php');
+                break;
+        }
+      include('table/danger.php')?>
         <!-- Modal -->
     
 </div>

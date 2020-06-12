@@ -116,19 +116,22 @@
                             <div class="row">
                                 <div class="form-group col-md">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch1" name="AAP">
+                                        <input type="checkbox" class="custom-control-input" id="switch1" name="AAP" <?php if (@$_GET['operation'] == 'modification') { if (@$user['aap'] == "oui") { echo 'checked' ;}}
+                                         ?> > 
                                         <label class="custom-control-label" for="switch1">Ajouter Pays</label>
                                     </div>
                                 </div>
                                 <div class="form-group col-md">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch2" name="AAV">
+                                        <input type="checkbox" class="custom-control-input" id="switch2" name="AAV" <?php if (@$_GET['operation'] == 'modification') { if (@$user['aav'] == "oui") { echo 'checked' ;}}
+                                         ?>>
                                         <label class="custom-control-label" for="switch2">Ajouter Ville</label>
                                     </div>
                                 </div>
                                 <div class="form-group col-md">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch3" name="AAQ">
+                                        <input type="checkbox" class="custom-control-input" id="switch3" name="AAQ" <?php if (@$_GET['operation'] == 'modification') { if (@$user['aaq'] == "oui") { echo 'checked' ;}}
+                                         ?>>
                                         <label class="custom-control-label" for="switch3">Ajouter Quartier</label>
                                     </div>
                                 </div>
@@ -137,13 +140,15 @@
                             <div class="row">
                                 <div class="form-group col-md">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch4" name="AATD">
+                                        <input type="checkbox" class="custom-control-input" id="switch4" name="AATD" <?php if (@$_GET['operation'] == 'modification') { if (@$user['aatd'] == "oui") { echo 'checked' ;}}
+                                         ?>>
                                         <label class="custom-control-label" for="switch4">Ajouter Type de Danger</label>
                                     </div>
                                 </div>
                                 <div class="form-group col-md">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch5" name="AACD">
+                                        <input type="checkbox" class="custom-control-input" id="switch5" name="AACD" <?php if (@$_GET['operation'] == 'modification') { if (@$user['aacd'] == "oui") { echo 'checked' ;}}
+                                         ?>>
                                         <label class="custom-control-label" for="switch5">Ajouter Catégorie de Danger</label>
                                     </div>
                                 </div> 

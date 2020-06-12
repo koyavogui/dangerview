@@ -12,10 +12,18 @@
     <?php require('links.php'); ?>
     <title> Tableau de bord - Ajout Utilisateur</title>
 </head>
-<body class="corp">
-
-    <?php include('menu.php'); ?>
-    <?php
+<?php 
+        switch ($_SESSION['typeUtilisateur']) {
+            case 'Administrateur':
+                echo'<body class="corp">';
+                include('menu.php');
+                break;
+            case 'Operateur':
+                echo'<body class="corp-op">';
+                include('menu-operateur.php');
+                break;
+        }
+     
         if (!empty($_SESSION['default'])) {
              echo '<section class="container-fluid">
              <div class="alert block-forms alert-dismissible fade show bg-dger-white ml-auto mr-auto"   style="width:90vw;" role="alert">

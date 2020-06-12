@@ -23,9 +23,6 @@ session_start();
     $imagePath          = '../image/danger/'. basename($image);
     $imageExtension     = pathinfo($imagePath,PATHINFO_EXTENSION);
     $isSuccess          = true;
-    $isUploadSuccess    = false;
-
- 
     if (empty($tDanger)) {
         $_SESSION['tDangerError'] ='<i class="fa fa-info" aria-hidden="true"></i> Veillez choisir un type de danger s\'il vous plait'; 
         $isSuccess = false;
@@ -70,67 +67,99 @@ session_start();
         $_SESSION['zDangerError'] ='<i class="fa fa-info" aria-hidden="true"></i> Veillez choisir un s\'il vous plait'; 
         $isSuccess = false;
     } 
-    if(empty($image)) 
+    if(empty($image)) // le input file est vide, ce qui signifie que l'image n'a pas ete update
         {
-            $_SESSION['imageError'] = '<i class="fa fa-info" aria-hidden="true"></i> Ce champ ne peut pas être vide';
-            $isSuccess = false;
+            $isImageUpdated = false;
+            echo'<hr>';
         }
-        if(!empty($image)) 
+        else
         {
-            $isUploadSuccess = true;
+            echo'<hr>';
+            $isImageUpdated = true;
+            $isUploadSuccess =true;
             if($imageExtension != "jpg" && $imageExtension != "png" && $imageExtension != "jpeg" && $imageExtension != "gif" ) 
             {
-                $_SESSION['imageError'] = '<i class="fa fa-info" aria-hidden="true"></i> Les fichiers autorises sont: .jpg, .jpeg, .png, .gif';
-                echo "Les fichiers autorises sont: .jpg, .jpeg, .png, .gif";
+                $imageError = "Les fichiers autorises sont: .jpg, .jpeg, .png, .gif";
+                $isUploadSuccess = false;
+            }
+            if(file_exists($imagePath)) 
+            {
+                $imageError = "Le fichier existe deja";
                 $isUploadSuccess = false;
             }
             if($_FILES["image"]["size"] > 5000000) 
             {
-                $_SESSION['imageError'] = '<i class="fa fa-info" aria-hidden="true"></i> Le fichier ne doit pas depasser les 500KB';
-                echo "Le fichier ne doit pas depasser les 500KB";
+                echo'<hr>';
+                $imageError = "Le fichier ne doit pas depasser les 500KB";
                 $isUploadSuccess = false;
             }
             if($isUploadSuccess) 
             {
-                if(!move_uploaded_file($_FILES["image"]["tmp_name"], $imagePath ) )
+                if(!move_uploaded_file($_FILES["image"]["tmp_name"], $imagePath)) 
                 {
-                    $_SESSION['imageError'] = '<i class="fa fa-info" aria-hidden="true"></i> Il y a eu une erreur lors de l\'upload';
-                    echo "Il y a eu une erreur lors de l'upload";
+                    $imageError = "Il y a eu une erreur lors de l'upload";
                     $isUploadSuccess = false;
                 } 
             } 
         }
+
         var_dump($isSuccess);
         var_dump($isUploadSuccess);
-        var_dump($isSuccess && $isUploadSuccess);
-        if ($isSuccess && $isUploadSuccess)
-    {
-
-           $newdanger = [ 
-            'typeDanger'        => $tDanger, 
-            'categorieDanger'   => $cDanger, 
-            'descriptionDanger' => $descDanger,
-            'victimeDanger'     => $vDanger,
-            'bourreauDanger'    => $bDanger,
-            'sourceDanger'      => $sourceDanger, 
-            'dateModif'         => date("Y-m-d H:i:s"),
-            'dateDanger'        => $dateDanger,
-            'imageDanger'       => $image, 
-            'paysDanger'        => $paysDanger,  
-            'villeDanger'       => $vilDanger, 
-            'quartierDanger'    => $qDanger, 
-            'lieuDanger'        => $zDanger,
-            'idoperateur'       => $_SESSION['idUtilisateur']
-           ];
-           var_dump($newdanger);
-           $insertdanger = "INSERT INTO dangertable (typeDanger, categorieDanger, descriptionDanger, victimeDanger, bourreauDanger, sourceDanger, derniereModification, dateDanger, imageDanger, pays, ville, quartier, lieu, idoperateur) VALUES  (:typeDanger,:categorieDanger,:descriptionDanger,:victimeDanger,:bourreauDanger,:sourceDanger,:dateModif,:dateDanger,:imageDanger,:paysDanger,:villeDanger,:quartierDanger, :lieuDanger, :idoperateur)" ;
+        var_dump($isSuccess && $isImageUpdated && $isUploadSuccess);
+        var_dump($isSuccess && !$isImageUpdated);
+        if (($isSuccess && $isImageUpdated && $isUploadSuccess) || ($isSuccess && !$isImageUpdated))
+            {
+                $db = Database::connect();
+            if($isImageUpdated)
+            {
+                $newdanger = [ 
+                    'typeDanger'        => $tDanger, 
+                    'categorieDanger'   => $cDanger, 
+                    'descriptionDanger' => $descDanger,
+                    'victimeDanger'     => $vDanger,
+                    'bourreauDanger'    => $bDanger,
+                    'sourceDanger'      => $sourceDanger, 
+                    'dateModif'         => date("Y-m-d H:i:s"),
+                    'dateDanger'        => $dateDanger,
+                    'imageDanger'       => $image, 
+                    'paysDanger'        => $paysDanger,  
+                    'villeDanger'       => $vilDanger, 
+                    'quartierDanger'    => $qDanger, 
+                    'lieuDanger'        => $zDanger,
+                    'idoperateur'       => $_SESSION['idUtilisateur'],
+                    'iddanger'          => checkInput($_GET['id'])
+                   ];
+                   var_dump($newdanger);
+                   $insertdanger = "UPDATE dangertable  SET typeDanger=:typeDanger, categorieDanger=:categorieDanger, descriptionDanger=:descriptionDanger, victimeDanger=:victimeDanger, bourreauDanger=:bourreauDanger, sourceDanger=:sourceDanger, derniereModification=:dateModif,    dateDanger=:dateDanger, imageDanger=:imageDanger,pays=:paysDanger,  ville=:villeDanger, quartier=:quartierDanger, lieu=:lieuDanger,     idoperateur=:idoperateur WHERE idDanger =:iddanger";      
+            }
+            else
+            {
+                $newdanger = [ 
+                    'typeDanger'        => $tDanger, 
+                    'categorieDanger'   => $cDanger, 
+                    'descriptionDanger' => $descDanger,
+                    'victimeDanger'     => $vDanger,
+                    'bourreauDanger'    => $bDanger,
+                    'sourceDanger'      => $sourceDanger, 
+                    'dateModif'         => date("Y-m-d H:i:s"),
+                    'dateDanger'        => $dateDanger, 
+                    'paysDanger'        => $paysDanger,  
+                    'villeDanger'       => $vilDanger, 
+                    'quartierDanger'    => $qDanger, 
+                    'lieuDanger'        => $zDanger,
+                    'idoperateur'       => $_SESSION['idUtilisateur'],
+                    'iddanger'          => checkInput($_GET['id'])
+                   ];
+                   var_dump($newdanger);
+                   $insertdanger = "UPDATE dangertable  SET typeDanger=:typeDanger, categorieDanger=:categorieDanger, descriptionDanger=:descriptionDanger, victimeDanger=:victimeDanger, bourreauDanger=:bourreauDanger, sourceDanger=:sourceDanger, derniereModification=:dateModif,    dateDanger=:dateDanger, pays=:paysDanger,  ville=:villeDanger, quartier=:quartierDanger, lieu=:lieuDanger,     idoperateur=:idoperateur WHERE idDanger =:iddanger";      
+            }
            $db=Database::connect();
            $resultat = $db->prepare($insertdanger)->execute($newdanger);
            $db=Database::deconnect();
            echo '<hr>';
            var_dump($resultat);
             $newActivite = [
-                ':activite'     => 'Ajout Danger',
+                ':activite'     => 'Modification Danger',
                 ':dateactivite' => date("Y-m-d H:i:s"),
                 ':iduser'       => $_SESSION['idUtilisateur']
             ];
@@ -143,14 +172,13 @@ session_start();
             $rActivite = $db->prepare($activite)->execute($newActivite);
             $db=Database::deconnect();
             var_dump($rActivite);
-            $_SESSION['default'] ='Ajout de danger réussi';
-           ($resultat) ? header ("location:../ajout-danger.php") : header ("location:../ajout-danger.php") ;
+            $_SESSION['default'] ='';
+           ($resultat) ? header ("location:../list-danger.php") : header ("location:../list-danger.php") ;
         }
     }
     $_SESSION['default'] ='Ajout de danger non effectuer';
-    header ("location:../ajout-danger.php");
+    header ("location:../list-danger.php");
 
     }
-    $_SESSION['default'] ='Ajout de danger non effectuer';
-    header ("location:../ajout-danger.php");
+    header ("location:../list-danger.php");
 ?>

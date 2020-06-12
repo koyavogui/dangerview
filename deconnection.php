@@ -16,7 +16,7 @@ $db= Database::connect();
    if($rActivite){
     Database::deconnect();
     session_destroy();
-    header ("location:/");
+    header ("location:index.php");
    }
 
 ?>

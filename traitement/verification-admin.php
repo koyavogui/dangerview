@@ -49,13 +49,13 @@
                                     var_dump($_SESSION['typeUtilisateur']);
                                     switch ($_SESSION['typeUtilisateur']) {
                                         case 'Administrateur':
-                                            header ("location:../dasboard.php");
+                                            header ("location:../dashboard.php");
                                             break;
                                         case 'Operateur':
-                                            header ("location:../dasboard-op.php");
+                                            header ("location:../dashboard-op.php");
                                             break;
                                         case 'Superviseur':
-                                            header ("location:../dasboard-sup.php");
+                                            header ("location:../dashboard-sup.php");
                                             break;
                                         
                                         default:
@@ -67,17 +67,17 @@
                                         echo ' <br> Echec de connection';
                                         $_SESSION['echecConnection'] = " l'Email ou le mot de passe est incorrect.";
                                         var_dump( $_SESSION['echecConnection']);
-                                        //header ("location:../");
+                                        header ("location:../");
                                     }
                         
                         } else{
                         echo ' <br> Echec de connection';
                         $_SESSION['echecConnection'] = " l'Email ou le mot de passe est incorrect.";
                         var_dump( $_SESSION['echecConnection']);
-                        #header ("location:../");
+                        header ("location:../");
                         }
                 } else {
-                //header ("location:../");
+                header ("location:../");
                 }
             }else{
 

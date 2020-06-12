@@ -82,35 +82,35 @@
     if ($isSuccess && $isUploadSuccess) {
 
         if (isset($_POST)) {
-            if (isset($_POST['aap'])) {
+            if (isset($_POST['AAP'])) {
                 $aap = "oui"; 
             }
             else{
                 $aap = "non";
             };
-            if (isset($_POST['aav'])) {
+            if (isset($_POST['AAV'])) {
                 $aav = "oui"; 
             }
             else{
                 $aav = "non";
             };
-            if (isset($_POST['aaq'])) {
+            if (isset($_POST['AAQ'])) {
                 $aaq = "oui"; 
             }else {
                 $aaq = "non"; 
             };
-            if (isset($_POST['aatd'])) {
+            if (isset($_POST['AATD'])) {
                 $aatd = "oui"; 
             }else{
                 $aatd = "non"; 
             };
-            if (isset($_POST['aacd'])) {
+            if (isset($_POST['AACD'])) {
                 $aacd = "oui"; 
             }
             else {
                 $aacd ="non";
             };
-            $mpdrand =passgen2(15);
+            $mpdrand = 'simpl-som-koute';
             $mdp = password_hash($mpdrand, PASSWORD_BCRYPT); 
            $newuser = [ 
             'nom'           => $nom, 
@@ -128,6 +128,10 @@
             'idadmin'       => $_SESSION['idUtilisateur'],
             'avatar'        => $image
            ];
+           echo '<hr>';
+           echo '<hr><br><br>';
+           echo '<hr>';
+
            var_dump($newuser);
            $insertuser = "INSERT INTO user (nomUtilisateur, prenomUtilisateur, sexeUtilisateur, emailuser, motdepasseuser, dateinscriptionuser, roleUtilisateur, aap,aav, aaq, aatd, aacd, avatar, idParent) VALUES  (:nom,:prenom,:sexe,:email,:mdp,:inscription,:typeUser,:aap,:aav,:aaq,:aatd,:aacd, :avatar, :idadmin)" ;
            $resultat = $db->prepare($insertuser)->execute($newuser);

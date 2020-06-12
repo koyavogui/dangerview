@@ -28,8 +28,8 @@
                     <?php 
                         #Permettre d'afficher le message d'erreur de login
                         if (!empty($_SESSION)) {
-                            if ($_SESSION['echecConnection'] !="") {
-                                echo '<em class="text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i>'. $_SESSION['echecConnection'] .'</em>';
+                            if (@$_SESSION['echecConnection'] !="") {
+                                echo '<em class="text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i>'. @$_SESSION['echecConnection'] .'</em>';
                                 $_SESSION['echecConnection'] ="";
                             }
                         }            

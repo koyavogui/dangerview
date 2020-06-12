@@ -7,9 +7,9 @@
     <?php require('links.php'); ?>
     <title>Tableau de bord - Administrateur <?php $_SESSION['menuAactive'] = "akwaba"; ?> </title>
 </head>
-<body class="">
+<body class="corp">
     <?php include('menu.php'); ?>
-    <?php include('table/danger.php')?>
+    <?php include('main.php'); ?>
     <?php include('links-js.php'); ?>
 </body>
 </html>

@@ -8,8 +8,8 @@
                 <tr>
                     <th>N</th>
                     <th>Description</th>
-                    <th>Type de danger</th>
-                    <th>categorie de danger</th>
+                    <th>Type</th>
+                    <th>categorie </th>
                     <th>bourreau</th>
                     <th>Victime</th>
                     <th>Date</th>
@@ -22,12 +22,15 @@
                 
                 <?php
                     $db= Database::connect();
-                    $recupDanger= $db->query('SELECT * FROM  dangertable');
-                    while($danger = $recupDanger-> fetch())
+                    @$iduser = $_SESSION['idUtilisateur'];                    
+                    @$user= $db->prepare("SELECT * FROM  dangertable WHERE idOperateur=?");
+                    @$recupDanger=$user->execute([$iduser]);
+                    @$i=1;
+                    foreach($user as $danger)
                     {
                         echo '<tr>
                         <td>';
-                        echo $danger['idDanger'];
+                        echo  $i++;
                         echo '</td>
                         <td>';
                         echo $danger['descriptionDanger'];
@@ -50,8 +53,8 @@
                         echo '</td><td>';
                         echo '<em><a href="'.$danger['sourceDanger'].'">'.$danger['sourceDanger'].'<a></em>';
                         echo '</td><td>';
-                        echo '<a class="btn btn-outline-primary btn-sm ml-1" href="update-danger.php?id='.$danger['idDanger'].'&operation=modification"><i class="fas fa-pen" aria-hidden="true"></i> Modifier</a>';
-                        echo '<a class="btn btn-outline-danger btn-sm ml-1 text-danger" data-toggle="modal" data-target="#exampleModalCenter'.$danger['idDanger'].'"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer</a>';
+                        echo '<a class=" ml-1" href="maj-danger.php?id='.$danger['idDanger'].'&operation=modification"><i class="fas fa-pen" aria-hidden="true"></i> </a>';
+                        echo '<a class="text-danger" data-toggle="modal" data-target="#exampleModalCenter'.$danger['idDanger'].'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
                       
                         echo '</td>
                          <tr>';

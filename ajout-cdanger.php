@@ -14,8 +14,18 @@
     <?php require('links.php'); ?>
     <title> Tableau de bord - Ajout Danger </title>
 </head>
-<body class="corp">
-    <?php include('menu.php'); ?>
+    <?php 
+        switch ($_SESSION['typeUtilisateur']) {
+            case 'Administrateur':
+                echo'<body class="corp">';
+                include('menu.php');
+                break;
+            case 'Operateur':
+                echo'<body class="corp-op">';
+                include('menu-operateur.php');
+                break;
+        }
+    ?>
     <?php
         if ( @$_SESSION['success']) {
              echo '<section class="container-fluid">

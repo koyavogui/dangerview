@@ -22,7 +22,18 @@
     <title>Tableau de bord - liste Utilisateur </title>
 </head>
 <body>
-    <?php include('menu.php'); ?>
+<?php 
+        switch ($_SESSION['typeUtilisateur']) {
+            case 'Administrateur':
+                 
+                include('menu.php');
+                break;
+            case 'Operateur':
+                 
+                include('menu-operateur.php');
+                break;
+        }
+    ?>
     <div class="container block-forms">
         <div class="row">
             <section class="col-md">

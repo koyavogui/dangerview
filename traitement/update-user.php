@@ -50,29 +50,29 @@
 
         if (isset($_POST)) {
             echo'<br> verification des autorisations <hr>';
-            if (isset($_POST['aap'])) {
+            if (isset($_POST['AAP'])) {
                 $aap = "oui"; 
             }
             else{
                 $aap = "non";
             };
-            if (isset($_POST['aav'])) {
+            if (isset($_POST['AAV'])) {
                 $aav = "oui"; 
             }
             else{
                 $aav = "non";
             };
-            if (isset($_POST['aaq'])) {
+            if (isset($_POST['AAQ'])) {
                 $aaq = "oui"; 
             }else {
                 $aaq = "non"; 
             };
-            if (isset($_POST['aatd'])) {
+            if (isset($_POST['AATD'])) {
                 $aatd = "oui"; 
             }else{
                 $aatd = "non"; 
             };
-            if (isset($_POST['aacd'])) {
+            if (isset($_POST['AACD'])) {
                 $aacd = "oui"; 
             }
             else {
@@ -109,7 +109,7 @@
                 'aaq'           => $aaq, 
                 'aatd'          => $aatd,
                 'aacd'          => $aacd,
-                'idUser'        => $_GET['id']
+                'idUser'        => checkInput($_GET['id'])
                ];
                echo'<br><hr> Contenu de nouvellevariable';
                var_dump ($newuser);
@@ -156,7 +156,7 @@
             var_dump($activite);
             $rActivite = $db->prepare($activite)->execute($newActivite);
             var_dump($rActivite);
-            $_SESSION['default'] = "" ; 
+            $_SESSION['default'] = "Information d'utilisateur mis à jour avec succes" ; 
            }
             
            ($resultat) ? header ("location:../list-utilisateur.php") : header ("location:../list-utilisateur.php") ;
