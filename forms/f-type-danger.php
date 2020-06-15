@@ -2,22 +2,57 @@
         <div class="ml-auto mr-auto  block-forms" style="width:90vw;">
             <header class="row bg-warning">
                 <div class="col-md-10 col-lg-10 ml-auto mr-auto">
-                    <h3 class="text-center"> Enregistrement -  Type Danger</h3>
+                    <h3 class="text-center"> 
+                    <?php  
+                                if (isset($_GET['operation']) && ($_GET['operation'] == 'modification') ) {
+                                    echo 'Modification -  Type Danger';
+                                    if(!empty($_GET['id'])) 
+                                    {
+                                        $id = checkInput($_GET['id']);
+                                         
+                                    }    
+                                    $db= Database::connect();
+                                    $recupUnique = $db->query("SELECT * FROM typedanger WHERE idTypeDanger= $id");
+                                    $tdanger = $recupUnique->fetch();
+                                    Database::deconnect();
+                                } else {
+                                    echo 'Enregistrement -  Type Danger';
+                                }
+                                
+                            ?>
+                    </h3>
                 </div>
             </header>
             <section class="row bg-dger-white bd-dger-white">
                 <div class="monformulaire container-fluid">
-                <form action="traitement/add-tdanger.php" method="POST" enctype="multipart/form-data" class="container-fluid">
+                <form action="<?php  
+                                if (isset($_GET['operation']) && ($_GET['operation'] == 'modification') ) {
+                                    echo 'traitement/update-tdanger.php?id='.$id ;
+                                } else {
+                                    echo 'traitement/add-tdanger.php';
+                                }
+                                
+                            ?>" method="POST" enctype="multipart/form-data" class="container-fluid">
                         <div class="form-group row mt-2">
                             <label for="tdanger" class="col-lg-3 col-md-2 ">Type de Danger</label>
                             <div class="col-lg col-md col-sm">
-                                <input type="text" name="tdanger" id="" class="form-control <?php echo $_SESSION['echec']; $_SESSION['echec']="";  ?>">
+                                <input type="text" name="tdanger" id="" class="form-control <?php echo $_SESSION['echec']; $_SESSION['echec']="";  ?>" <?php  if (@$_GET['operation'] == 'modification') {
+                                    echo 'value="' .$tdanger['typeDanger'].'"';
+                                } ?> required>
                                 <div class="invalid-feedback"> <?php echo @$_SESSION['infoechec']; ?></div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-2 ml-auto"> 
-                                <button type="submit" class="btn btn-warning btn-lg col-md mr-auto text-light">Ajouter</button>
+                                <button type="submit" class="btn btn-warning btn-lg col-md mr-auto text-light"><?php  
+                                if (isset($_GET['operation'])) {
+                                    echo 'Modifier';
+                                    
+                                } else {
+                                    echo 'Ajouter';
+                                }
+                                
+                            ?></button>
                             </div> 
                         </div>
                 </form>
@@ -45,7 +80,7 @@
                                     <td>';
                                     echo $tDanger['typeDanger'];
                                     echo '</td><td>';
-                                    echo '<a class="btn btn-outline-primary btn-sm ml-1" href="'.$tDanger['idTypeDanger'].'&operation=modification"><i class="fas fa-pen" aria-hidden="true"></i> Modifier</a>';
+                                    echo '<a class="btn btn-outline-primary btn-sm ml-1" href="ajout-tdanger.php?id='.$tDanger['idTypeDanger'].'&operation=modification"><i class="fas fa-pen" aria-hidden="true"></i> Modifier</a>';
                                     echo '<a class="btn btn-outline-danger btn-sm ml-1 text-danger" data-toggle="modal" data-target="#exampleModalCenter'.$tDanger['idTypeDanger'].'"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer</a>';
                                 
                                     echo '</td>
@@ -66,7 +101,7 @@
                                             <form class="form" action="delete.php" role="form" method="post">
                                                 <input type="hidden" name="id" value="'.$tDanger['typeDanger'].'"/>
                                                 <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Annuler</button>
-                                                <a href="traitement/delete-user.php?id='.$tDanger['idTypeDanger'].'" class="btn btn-danger">Supprimer</a> 
+                                                <a href="traitement/delete-tdanger.php?id='.$tDanger['idTypeDanger'].'" class="btn btn-danger">Supprimer</a> 
                                             </form>
                                         </div>
 

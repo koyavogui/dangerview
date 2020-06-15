@@ -2,17 +2,43 @@
         <div class="ml-auto mr-auto  block-forms" style="width:90vw;">
             <header class="row bg-warning">
                 <div class="col-md-10 col-lg-10 ml-auto mr-auto">
-                    <h3 class="text-center"> Enregistrement -  Categorie Danger</h3>
+                    <h3 class="text-center"> <?php  
+                                if (isset($_GET['operation']) && ($_GET['operation'] == 'modification') ) {
+                                    echo 'Modification -  Categorie Danger';
+                                    if(!empty($_GET['id'])) 
+                                    {
+                                        $id = checkInput($_GET['id']);
+                                         
+                                    }    
+                                    $db= Database::connect();
+                                    $recupUnique = $db->query("SELECT * FROM categoriedanger WHERE idCategorieDanger= $id");
+                                    $cdanger = $recupUnique->fetch();
+                                    Database::deconnect();
+                                } else {
+                                    echo 'Enregistrement -  Categorie Danger';
+                                }
+                                
+                            ?></h3>
                 </div>
             </header>
             <section class="row bg-dger-white bd-dger-white">
                 <div class="monformulaire container-fluid">
-                <form action="traitement/add-cdanger.php" method="POST" enctype="multipart/form-data" class="container-fluid">
+                <form action="<?php  
+                                if (isset($_GET['operation']) && ($_GET['operation'] == 'modification') ) {
+                                    echo 'traitement/update-cdanger.php?id='.$id ;
+                                } else {
+                                    echo 'traitement/add-cdanger.php';
+                                }
+                                
+                            ?>" method="POST" enctype="multipart/form-data" class="container-fluid">
                     <div class="row">
                         <div class="form-group col-md">
                             <label for="tdanger" class="">Type de Danger</label>
-                            <select name="tdanger" class="custom-select">
-                            <option value="">Veiller choisir un type de danger</option>
+                            <select name="tdanger" class="custom-select" required>
+                            
+                            <?php echo $_SESSION['echec']; $_SESSION['echec']="";  ?>" <?php  if (@$_GET['operation'] == 'modification') {
+                                    echo '<option value="' .$cdanger[2].'">' .$cdanger[2].'</option>';
+                                } ?> 
                                 <?php
                                     $db=Database::connect();
                                     $recuptdanger = $db->query("SELECT * FROM typedanger ORDER BY typeDanger ASC");
@@ -26,12 +52,22 @@
                         </div>
                         <div class="form-group col-md">
                             <label for="cdanger">Categorie de Danger</label>
-                            <input type="text" name="cdanger" id="" class="form-control <?php echo $_SESSION['echec']; $_SESSION['echec']="";  ?>">
+                            <input type="text" name="cdanger" id="" class="form-control <?php echo $_SESSION['echec']; $_SESSION['echec']=""; echo $_SESSION['echec']; $_SESSION['echec']="";  ?>" <?php  if (@$_GET['operation'] == 'modification') {
+                                    echo 'value="' .$cdanger['nomCategorieDanger'].'"';
+                                } ?> required">
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-2 ml-auto"> 
-                            <button type="submit" class="btn btn-warning btn-lg col-md mr-auto text-light">Ajouter</button>
+                            <button type="submit" class="btn btn-warning btn-lg col-md mr-auto text-light"><?php  
+                                if (isset($_GET['operation'])) {
+                                    echo 'Modifier';
+                                    
+                                } else {
+                                    echo 'Ajouter';
+                                }
+                                
+                            ?></button>
                         </div> 
                     </div>
                 </form>
@@ -63,7 +99,7 @@
                                     <td>';
                                     echo $cDanger['nomCategorieDanger'];
                                     echo '</td><td>';
-                                    echo '<a class="btn btn-outline-primary btn-sm ml-1" href="'.$cDanger['idCategorieDanger'].'&operation=modification"><i class="fas fa-pen" aria-hidden="true"></i> Modifier</a>';
+                                    echo '<a class="btn btn-outline-primary btn-sm ml-1" href="ajout-cdanger.php?id='.$cDanger['idCategorieDanger'].'&operation=modification"><i class="fas fa-pen" aria-hidden="true"></i> Modifier</a>';
                                     echo '<a class="btn btn-outline-danger btn-sm ml-1 text-danger" data-toggle="modal" data-target="#exampleModalCenter'.$cDanger['idCategorieDanger'].'"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer</a>';
                                 
                                     echo '</td>
@@ -84,7 +120,7 @@
                                             <form class="form" action="delete.php" role="form" method="post">
                                                 <input type="hidden" name="id" value="'.$cDanger['nomCategorieDanger'].'"/>
                                                 <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Annuler</button>
-                                                <a href="traitement/delete-user.php?id='.$cDanger['nomCategorieDanger'].'" class="btn btn-danger">Supprimer</a> 
+                                                <a href="traitement/delete-cdanger.php?id='.$cDanger['nomCategorieDanger'].'" class="btn btn-danger">Supprimer</a> 
                                             </form>
                                         </div>
 
