@@ -23,6 +23,9 @@
                 echo'<body class="corp-op">';
                 include('menu-operateur.php');
                 break;
+            default:
+                include('menu.php');
+                        break; 
         }
      include('forms/f-add-ville.php'); ?>
     

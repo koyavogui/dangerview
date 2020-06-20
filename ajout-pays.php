@@ -23,6 +23,9 @@
                 echo'<body class="corp-op">';
                 include('menu-operateur.php');
                 break;
+                default:
+            include('menu.php');
+                    break; 
         }
     ?>
     <?php include('forms/f-add-pays.php'); ?>

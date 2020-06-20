@@ -11,7 +11,22 @@
     <title>Tableau de bord - Liste Lieud</title>
 </head>
 <body class="corp">
-    <?php include('menu.php'); ?>
+    <?php 
+        switch ($_SESSION['typeUtilisateur']) {
+            case 'Administrateur':
+                echo'<body class="">';
+                include('menu.php');
+                break;
+            case 'Operateur':
+                echo'<body class="corp-op">';
+                include('menu-operateur.php');
+                break;
+                default:
+                echo'<body class="">';
+            include('menu.php');
+                break;
+        }
+    ?>
     <?php include('main-lieu.php'); ?>
     <?php include('links-js.php'); ?>
   
