@@ -6,16 +6,18 @@
    var_dump($_POST);
    var_dump($_FILES["image"]["name"]);
    if (!empty($_POST)) {
-        $nomlieu          =checkInput($_POST['nomlieu']);
-        $categorielieu    =checkInput($_POST['categorielieu']);
-        $longlieu         =checkInput($_POST['longlieu']);
-        $latlieu          =checkInput($_POST['latlieu']);
-        $descriptionlieu  =checkInput($_POST['descriptionlieu']);
-        $image            =checkInput($_FILES["image"]["name"]);
+        $nomlieu          =strip_tags($_POST['nomlieu']);
+        $categorielieu    =strip_tags($_POST['categorielieu']);
+        $longlieu         =strip_tags($_POST['longlieu']);
+        $latlieu          =strip_tags($_POST['latlieu']);
+        $descriptionlieu  =strip_tags($_POST['descriptionlieu']);
+        $image            =strip_tags($_FILES["image"]["name"]);
         $imagePath        = '../image/lieu/'. basename($image);
         $imageExtension   = pathinfo($imagePath,PATHINFO_EXTENSION);
         $isSuccess        = true;
         $isUploadSuccess  = false;
+
+        
   
         if (empty($_POST['pays'])) {
             $_SESSION['errorpays'] ='is-invalid';
@@ -82,6 +84,9 @@
                     } 
                 } 
             }
+            var_dump($isSuccess);
+            var_dump( $isUploadSuccess);
+            var_dump($isSuccess && $isUploadSuccess);
             if ($isSuccess && $isUploadSuccess) {
                  $newlieu = [
                      'categorieLieu'        =>$categorielieu,
@@ -93,9 +98,10 @@
                      'quartier'             =>$_POST['quartier'],
                      'ville'                =>$_POST['ville'],
                      'pays'                 =>$_POST['pays'],
-                     'dernieremodif'        => date("Y-m-d H:i:s")
+                     'dernieremodif'        => date("Y-m-d H:i:s"),
+                     'id'                   => $_SESSION['idUtilisateur'],
                  ];
-                $insertlieu = "INSERT INTO lieu(categorieLieu, NomLieu, longitude, latitude, descriptionLieu, imageLieu, quartier, ville, pays, dernieremodif) VALUES ( :categorieLieu, :nomLieu, :longitude, :latitude, :descriptionlieu, :imagelieu, :quartier, :ville, :pays, :dernieremodif)";
+                $insertlieu = "INSERT INTO lieu (categorieLieu, nomLieu, lng, lat, descriptionLieu, imageLieu, idQuartier, idVille, idPays, dernieremodif, idUtilisateur) VALUES ( :categorieLieu, :nomLieu, :longitude, :latitude, :descriptionlieu, :imagelieu, :quartier, :ville, :pays, :dernieremodif, :id)";
                 $resultat = $db->prepare($insertlieu)->execute($newlieu);
                 var_dump($resultat);
                 $newActivite = [

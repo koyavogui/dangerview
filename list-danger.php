@@ -14,12 +14,16 @@
 <?php 
         switch ($_SESSION['typeUtilisateur']) {
             case 'Administrateur':
-                echo'<body class="corp">';
+                echo'<body class="">';
                 include('menu.php');
                 break;
             case 'Operateur':
                 echo'<body class="corp-op">';
                 include('menu-operateur.php');
+                break;
+                default:
+                echo'<body class="">';
+            include('menu.php');
                 break;
         }
       include('table/danger.php')?>

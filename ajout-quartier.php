@@ -11,7 +11,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style/style-admin.css">
     <?php require('links.php'); ?>
-    <title> Tableau de bord - Ajout Danger </title>
+    <title>                            
+        <?php  
+            if (isset($_GET['operation']) && ($_GET['operation'] == 'modification') ) {
+                echo ' Tableau de bord - Modification quartier';
+                if(!empty($_GET['id'])) 
+                {
+                    $id = strip_tags($_GET['id']);
+                        
+                }    
+                $db= Database::connect();
+                $recupUnique = $db->query("SELECT * FROM quartier WHERE idQuartier= $id");
+                $quartier = $recupUnique->fetch();
+                Database::deconnect();
+            } else {
+                echo 'Tableau de bord - Enregistrement quartier';
+            }
+            
+        ?>
+    </title>
 </head>
 <?php 
         switch ($_SESSION['typeUtilisateur']) {

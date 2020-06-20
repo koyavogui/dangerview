@@ -9,7 +9,7 @@
                                 require 'fonction/fonctionverif.php';
                                 if(!empty($_GET['id'])) 
                                 {
-                                    $id = checkInput($_GET['id']);
+                                    $id = strip_tags($_GET['id']);
                                         
                                 }    
                                 $db= Database::connect();
@@ -44,9 +44,8 @@
                                         echo '<option value="'.$dangertable['typeDanger'].'" >'.$dangertable['typeDanger'].'</option>';
                                     }  
                                         $recuptdanger = $db->query("SELECT * FROM typedanger ORDER BY typeDanger ASC");
-                                        while ($tdanger = $recuptdanger->fetch()) 
-                                        {
-                                            echo '<option value="'. $tdanger['typeDanger'] .'">'.$tdanger['typeDanger'] .'<option>';
+                                        foreach ($recuptdanger as $tdanger ) {
+                                            echo '<option value="'. $tdanger['idTypeDanger'] .'">'.$tdanger['typeDanger'] .'</option>';
                                         }
                                          Database::deconnect();
                                     ?>
@@ -63,7 +62,7 @@
                                         $recupcdanger = $db->query("SELECT * FROM categoriedanger ORDER BY nomCategorieDanger ASC");
                                         while ($cdanger = $recupcdanger->fetch()) 
                                         {
-                                            echo '<option value="'. $cdanger['nomCategorieDanger'] .'">'.$cdanger['nomCategorieDanger'] .'<option>';
+                                            echo '<option value="'. $cdanger['idCategorieDanger'] .'">'.$cdanger['nomCategorieDanger'] .'</option>';
                                         }
                                         Database::deconnect();
                                     ?>
@@ -73,28 +72,32 @@
                             <div class="form-group">
                                 <label for="bDanger">Bourreau du danger</label>
                                 <select name="bDanger" class="custom-select" required>
-                                    <?php if (@$_GET['operation'] == 'modification') {echo '<option value="'.$dangertable['bourreauDanger'].'" >'.$dangertable['bourreauDanger'].'</option>';}?>
-                                    <option value="Enfant">Enfant</option>
-                                    <option value="Femme">Femme</option>
-                                    <option value="Fille">Fille</option>
-                                    <option value="Fillette">Fillette</option>
-                                    <option value="Garçon">Garçon</option>
-                                    <option value="Groupe de personne">Groupe de personne</option>
-                                    <option value="Homme">Homme</option>
+                                    <?php
+                                        if (@$_GET['operation'] == 'modification') {echo '<option value="'.$dangertable['categorieDanger'].'" >'.$dangertable['categorieDanger'].'</option>';}
+                                        Database::connect();
+                                        $recupcdanger = $db->query("SELECT * FROM auteur ORDER BY nomAuteur ASC");
+                                        while ($cdanger = $recupcdanger->fetch()) 
+                                        {
+                                            echo '<option value="'. $cdanger['idAuteur'] .'">'.$cdanger['nomAuteur'] .'</option>';
+                                        }
+                                        Database::deconnect();
+                                    ?>
                                 </select>
                                 <em class="text-danger"><?php echo @$_SESSION['bDangerError'] ; ?></em>
                             </div>
                             <div class="form-group">
                                 <label for="">Victime du danger</label>
                                 <select name="vDanger" class="custom-select" >
-                                    <?php if (@$_GET['operation'] == 'modification') {echo '<option value="'.$dangertable['bourreauDanger'].'" >'.$dangertable['bourreauDanger'].'</option>';}?>
-                                    <option value="Enfant">Enfant</option>
-                                    <option value="Femme">Femme</option>
-                                    <option value="Fille">Fille</option>
-                                    <option value="Fillette">Fillette</option>
-                                    <option value="Garçon">Garçon</option>
-                                    <option value="Groupe de personne">Groupe de personne</option>
-                                    <option value="Homme">Homme</option>
+                                    <?php
+                                        if (@$_GET['operation'] == 'modification') {echo '<option value="'.$dangertable['categorieDanger'].'" >'.$dangertable['categorieDanger'].'</option>';}
+                                        Database::connect();
+                                        $recupcdanger = $db->query("SELECT * FROM auteur ORDER BY nomAuteur ASC");
+                                        while ($cdanger = $recupcdanger->fetch()) 
+                                        {
+                                            echo '<option value="'. $cdanger['idAuteur'] .'">'.$cdanger['nomAuteur'] .'</option>';
+                                        }
+                                        Database::deconnect();
+                                    ?>
                                 </select>
                                 <em class="text-danger"><?php echo @$_SESSION['vDangerError'] ; ?></em>
                             </div>
@@ -107,7 +110,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="nomSource">Source</label>
-                                <input type="text" name="nomSource" id="" class="form-control" placeholder="" required value="<?php if (@$_GET['operation'] == 'modification') {echo $dangertable['sourceDanger']; }?>">
+                                <input type="url" name="nomSource" id="" class="form-control" placeholder="" required value="<?php if (@$_GET['operation'] == 'modification') {echo $dangertable['sourceDanger']; }?>">
                                 <em class="text-danger"><?php echo @$_SESSION['sourceDangerError'] ; ?></em>
                             </div>
                             <div class="form-group">
@@ -117,15 +120,26 @@
                             </div>
                             <div class="form-group">
                                 <label for="pays">Pays</label>
-                                <select name="pays" class="custom-select" required>
-                                        <?php if (@$_GET['operation'] == 'modification') {echo '<option value="'.$dangertable['pays'].'" >'.$dangertable['pays'].'</option>';} 
-                                        Database::connect();
-                                        @$recuppays = $db->query("SELECT * FROM pays ORDER BY nomPays ASC")->fetchAll();
-                                        foreach ($recuppays as $pays)
-                                        {
-                                            echo '<option value="'.$pays['nomPays'] .'">'.$pays['nomPays'] .'<option>';
-                                        }      
-                                    Database::deconnect();
+                                <select name="pays" class="custom-select" required onchange="recupVilleCombo(this.value)">
+                                <option value="">-- Pays --</option>
+                                <?php
+                                        if (isset($_GET['operation']) && ($_GET['operation'] == 'modification') ) {
+                                            $recuppays = $db->query("SELECT * FROM pays ORDER BY nomPays ASC")->fetchAll();
+                                            foreach ($recuppays as $pays)
+                                            {
+                                                if ($pays['idPays'] == $dangertable['idPays']) {
+                                                    echo '<option value="'.$pays['idPays'] .'" selected>'.$pays['nomPays'] .'</option>';
+                                                }else {
+                                                    echo '<option value="'.$pays['idPays'] .'">'.$pays['nomPays'] .'</option>';
+                                                }
+                                            }
+                                        } else {
+                                            $recuppays = $db->query("SELECT * FROM pays ORDER BY nomPays ASC")->fetchAll();
+                                            foreach ($recuppays as $pays)
+                                            {
+                                                echo '<option value="'.$pays['idPays'] .'">'.$pays['nomPays'] .'</option>';
+                                            }
+                                        }
                                     ?>
                                 </select>
                                 <em class="text-danger"><?php echo @$_SESSION['paysDangerError'] ; ?></em>
@@ -134,15 +148,26 @@
                             <section class="col-lg-4">
                             <div class="form-group">
                                 <label for="ville">Ville</label>
-                                <select name="ville" class="custom-select" required> 
-                                        <?php if (@$_GET['operation'] == 'modification') {echo '<option value="'.$dangertable[11].'" >'.$dangertable[11].'</option>';} 
-                                        Database::connect();
-                                        @$recupville = $db->query("SELECT * FROM ville ORDER BY nomVille ASC")->fetchAll();
-                                        foreach ($recupville as $ville)
-                                        {
-                                            echo '<option value="'.$ville['nomVille'] .'">'.$ville['nomVille'] .'<option>';
-                                        } 
-                                        Database::deconnect();
+                                <select name="ville" class="custom-select" required id="comboville"> 
+                                <option value="">-- Ville --</option>
+                                    <?php
+                                        if (isset($_GET['operation']) && ($_GET['operation'] == 'modification') ) {
+                                            $recupville = $db->query("SELECT * FROM ville ORDER BY nomVille ASC")->fetchAll();
+                                            foreach ($recupville as $ville)
+                                            {
+                                                if ($ville['idVille'] == $dangertable['idVille']) {
+                                                    echo '<option value="'.$ville['idVille'] .'" selected>'.$ville['nomVille'] .'</option>';
+                                                }else {
+                                                    echo '<option value="'.$ville['idVille'] .'">'.$ville['nomVille'] .'</option>';
+                                                }
+                                            }
+                                        } else {
+                                            $recupville = $db->query("SELECT * FROM ville ORDER BY nomVille ASC")->fetchAll();
+                                            foreach ($recupville as $ville)
+                                            {
+                                                echo '<option value="'.$ville['idVille'] .'">'.$ville['nomVille'] .'</option>';
+                                            }
+                                        }
                                     ?>
                                 </select>
                                 <em class="text-danger"><?php echo @$_SESSION['vilDangerError'] ; ?></em>
@@ -150,13 +175,13 @@
                             <br>
                             <div class="form-group">
                                 <label for="quartier">Quartier</label>
-                                <select name="quartier" class="custom-select" required>
-                                <?php if (@$_GET['operation'] == 'modification') {echo '<option value="'.$dangertable['quartier'].'" >'.$dangertable['quartier'].'</option>';} 
+                                <select name="quartier" class="custom-select" required id="Zcomboquartier">
+                                    <?php if (@$_GET['operation'] == 'modification') {echo '<option value="'.$dangertable['quartier'].'" >'.$dangertable['quartier'].'</option>';} 
                                         Database::connect();
                                         @$recupquartier = $db->query("SELECT * FROM quartier ORDER BY nomQuartier ASC")->fetchAll();
                                         foreach ($recupquartier as $quartier)
                                         {
-                                            echo '<option value="'.$quartier['nomQuartier'] .'">'.$quartier['nomQuartier'] .'<option>';
+                                            echo '<option value="'.$quartier['idQuartier'] .'">'.$quartier['nomQuartier'] .'</option>';
                                         }
                                         Database::deconnect();
                                     ?>
@@ -164,13 +189,16 @@
                                 <em class="text-danger"><?php echo @$_SESSION['qDangerError'] ; ?></em>
                             </div>
                             <div class="form-group">
-                                <label for="lieu">Zone</label>
-                                <input type="text" name="lieu" id="" class="form-control" required value="<?php if (@$_GET['operation'] == 'modification') {echo $dangertable['lieu']; }?>">
+                            <label for="lieu">zone</label>
+                                <select name="lieu" class="custom-select" required id="combozone"> 
+                                    <option value="">-- Quartier --</option>
+                                </select>
                                 <em class="text-danger"><?php echo @$_SESSION['zDangerError'] ; ?></em>
                             </div>
                             
                              
                             <div class="form-group">
+                            <label for="lieu">Image</label>
                                     <?php 
                                     if (@$_GET['operation'] == 'modification') 
                                     {
@@ -188,7 +216,6 @@
                                         </div>';
                                     }
                                     ?>
-                                    
                                 </div>
                             </section>
                             

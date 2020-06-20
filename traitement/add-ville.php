@@ -60,10 +60,13 @@
                      'nomLieu'              =>$nomlieu,
                      'descriptionlieu'      =>$descriptionlieu,
                      'imagelieu'            =>$image ,
+                     'lat'                  =>$_POST['latlieu'],
+                     'lng'                  =>$_POST['longlieu'],
                      'pays'                 =>$_POST['pays'],
-                     'dernieremodif'        => date("Y-m-d H:i:s")
+                     'dernieremodif'        => date("Y-m-d H:i:s"),
+                    'idUtilisateur'        => $_SESSION['idUtilisateur']
                  ];
-                $insertlieu = "INSERT INTO ville (nomVille, descriptionVille, imageVille, dernieremodif, idPays) VALUES (:nomLieu,  :descriptionlieu, :imagelieu, :dernieremodif, :pays )";
+                $insertlieu = "INSERT INTO ville (nomVille, descriptionVille,lat, lng, imageVille, dernieremodif, idPays, idUtilisateur) VALUES (:nomLieu,  :descriptionlieu, :lat, :lng, :imagelieu, :dernieremodif, :pays, :idUtilisateur)";
                 $resultat = $db->prepare($insertlieu)->execute($newlieu);
                 var_dump($resultat);
                 $newActivite = [
@@ -77,7 +80,7 @@
                 var_dump($activite);
                 $rActivite = $db->prepare($activite)->execute($newActivite);
                 var_dump($rActivite);
-               ($resultat) ? header ("location:../ajout-ville.php") : header ("location:../ajout-viller.php?operation=echec") ;
+                ($resultat) ? header ("location:../ajout-ville.php") : header ("location:../ajout-viller.php?operation=echec") ;
                 }
                
             }

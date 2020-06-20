@@ -22,6 +22,9 @@
                  
                 include('menu-operateur.php');
                 break;
+            default:
+            include('menu.php');
+                    break; 
         }
     ?>
     <?php include('table/user.php')?>

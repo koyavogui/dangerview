@@ -110,7 +110,7 @@
             else {
                 $aacd ="non";
             };
-            $mpdrand = 'simpl-som-koute';
+            $mpdrand = 'korotoum';
             $mdp = password_hash($mpdrand, PASSWORD_BCRYPT); 
            $newuser = [ 
             'nom'           => $nom, 

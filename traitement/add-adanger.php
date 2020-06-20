@@ -7,36 +7,38 @@
     var_dump(@$_POST);
  if (!empty(@$_POST))
         {
-                $tdanger   = checkInput($_POST['tdanger']);
-                $req = $db->prepare('SELECT typeDanger FROM typedanger WHERE typeDanger = ?');
-                $req->execute([$tdanger]);
+                $adanger   = strip_tags($_POST['adanger']);
+                $req = $db->prepare('SELECT auteur FROM nomAuteur WHERE nomAuteur = ?');
+                $nomAuteur = $req->execute([$adanger]);
+                $nomAuteur = $req->fetchAll();
+                $nombreligne = $req->rowCount(); //verifier si l'on trouve une valeur après la requette
+                var_dump($nombreligne);
+                
                 echo '<hr> verification';
-                $typedanger = $req->fetch();
-                $bddanger = $typedanger['typeDanger'];
-                var_dump($typedanger);
+                @$bddanger = @$nomAuteur['nomAuteur'];
+                var_dump($nomAuteur);
                 echo '<hr> verification';
-                var_dump(strcasecmp($bddanger,$tdanger) == 0);
-        if (strcasecmp($typedanger['typeDanger'],$tdanger) == 0){
+                var_dump(strcasecmp($bddanger,$adanger) == 0);
+        if (strcasecmp(@$nomAuteur['nomAuteur'],$adanger) == 0){
                 $_SESSION['echec']= 'is-invalid';
-                $_SESSION['infoechec'] ='cette valeur existe dejà, consulter la liste des Type';
-                header ("location:../ajout-tdanger.php");  
+                $_SESSION['infoechec'] ='cette valeur existe dejà, consulter la liste des auteur';
+                //header ("location:../ajout-adanger.php");  
             }else
             {
-                $newtype = [
-                    'typeDanger' => $tdanger, 
+                $newAuteur = [
+                    'nomAuteur' => $adanger, 
                     'id'        => $_SESSION['idUtilisateur'],
                     'datemodif' => date("Y-m-d H:i:s")
                 ];
-                $typeprepare=$db->prepare("INSERT  INTO typedanger(typeDanger, idUtilisateur, dernieremodification) VALUES (:typeDanger, :id, :datemodif)");
-                
-                $insert = $typeprepare->execute($newtype);
+                $auteurprepare=$db->prepare("INSERT  INTO auteur(nomAuteur, idUtilisateur, dernieremodification) VALUES (:nomAuteur, :id, :datemodif)");
+                $insert = $auteurprepare->execute($newAuteur);
                 echo '<hr> danger inserer';
                 var_dump($insert);
                 if(@$insert)
                 {
                     unset($_POST);
                     $newActivite = [
-                        ':activite'     => 'Ajout de type de danger',
+                        ':activite'     => 'Ajout de auteur de danger',
                         ':dateactivite' => date("Y-m-d H:i:s"),
                         ':iduser'       => $_SESSION['idUtilisateur']
                     ];
@@ -46,14 +48,14 @@
                     $rActivite = $db->prepare($activite)->execute($newActivite);
                     $_SESSION['success'] = 'true';
                     $_SESSION['echec']= '';
-                    header ("location:../ajout-tdanger.php");  
+                    header ("location:../ajout-adanger.php");  
                 }else{
-                    @$erreurType ='';
+                    @$erreurauteur ='';
                     $echec ='Ajout non effectué';
                 }
             }
         } else
         {
-            @$erreurType ='';
+            @$erreurauteur ='';
         }
 ?>

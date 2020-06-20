@@ -8,7 +8,7 @@
     <title>Tableau de bord - Operateur <?php $_SESSION['menuAactive'] = "akwaba"; ?> </title>
 </head>
 <body class="corp-op">
-    <?php include('menu-operateur.php'); ?>
+    <?php include('menu.php'); ?>
     <?php include('table/danger.php')?>
     <?php include('links-js.php'); ?>
 </body>

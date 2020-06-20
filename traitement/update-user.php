@@ -7,9 +7,9 @@
 
    if (!empty($_POST)) 
    {
-    $nom               = checkInput($_POST['nom']);
-    $prenom             = checkInput($_POST['prenom']); 
-    $image              = checkInput($_FILES["image"]["name"]);
+    $nom                = strip_tags($_POST['nom']);
+    $prenom             = strip_tags($_POST['prenom']); 
+    $image              = strip_tags($_FILES["image"]["name"]);
     $imagePath          = '../image/avatar/'. basename($image);
     $imageExtension     = pathinfo($imagePath,PATHINFO_EXTENSION);
     $isSuccess          = true;
@@ -109,7 +109,7 @@
                 'aaq'           => $aaq, 
                 'aatd'          => $aatd,
                 'aacd'          => $aacd,
-                'idUser'        => checkInput($_GET['id'])
+                'idUser'        => strip_tags($_GET['id'])
                ];
                echo'<br><hr> Contenu de nouvellevariable';
                var_dump ($newuser);

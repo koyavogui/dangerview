@@ -6,9 +6,9 @@
    var_dump($_POST);
    var_dump($_FILES["image"]["name"]);
    if (!empty($_POST)) {
-        $nomlieu          =checkInput($_POST['nomlieu']);
-        $descriptionlieu  =checkInput($_POST['descriptionlieu']);
-        $image            =checkInput($_FILES["image"]["name"]);
+        $nomlieu          =strip_tags($_POST['nomlieu']);
+        $descriptionlieu  =strip_tags($_POST['descriptionlieu']);
+        $image            =strip_tags($_FILES["image"]["name"]);
         $imagePath        = '../image/lieu/pays/'. basename($image);
         $imageExtension   = pathinfo($imagePath,PATHINFO_EXTENSION);
         $isSuccess        = true;
@@ -53,10 +53,13 @@
                  $newlieu = [
                      'nomLieu'              =>$nomlieu,
                      'descriptionlieu'      =>$descriptionlieu,
+                     'lat'                  =>$_POST['latlieu'],
+                     'lng'                  =>$_POST['longlieu'],
                      'imagelieu'            =>$image,
-                     'dernieremodif'        => date("Y-m-d H:i:s")
+                     'dernieremodif'        => date("Y-m-d H:i:s"),
+                     'idUtilisateur'        => $_SESSION['idUtilisateur']
                  ];
-                $insertlieu = "INSERT INTO pays (nomPays, descriptionPays, imagePays, dernieremodif) VALUES (:nomLieu,  :descriptionlieu, :imagelieu, :dernieremodif )";
+                $insertlieu = "INSERT INTO pays (nomPays,lng, lat, descriptionPays, imagePays, dernieremodif, idUtilisateur) VALUES (:nomLieu, :lat, :lng  :descriptionlieu, :imagelieu, :dernieremodif, :idUtilisateur )";
                 $resultat = $db->prepare($insertlieu)->execute($newlieu);
                 var_dump($resultat);
                 $newActivite = [

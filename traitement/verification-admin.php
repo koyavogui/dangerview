@@ -57,9 +57,12 @@
                                         case 'Superviseur':
                                             header ("location:../dashboard-sup.php");
                                             break;
+                                        case 'Super Administrateur':
+                                            header ("location:../dashboard.php");
+                                            break;
                                         
                                         default:
-                                            # code...
+                                        header ("location:../dashboard.php");
                                             break;
                                     }
                                 }else

@@ -46,7 +46,7 @@
 .navbar-toggler {
     border-color: rgb(255,197,0, 0.5) !important;
 } 
-.nav-item > a{
+.menuPrincipal > a{
     text-decoration: none;
     color: #fff;
 }

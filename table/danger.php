@@ -3,9 +3,9 @@
     <div class=" row ml-auto mr-auto  block-forms pl-25 " style="width:90vw;">
     <h1><strong>Liste des dangers </strong><a href="ajout-danger.php" class="btn btn-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Ajouter</a></h1>
 
-        <table class="table table-striped container-fluid content-justify-center table-responsive  ">
-            <thead class="thead-dark">
-                <tr>
+        <table class="table container-fluid content-justify-center table-sm table-responsive table-hover table-borderless">
+            <thead class="border-bottom border-top border-warning">
+                <tr class="table-warning">
                     <th>N</th>
                     <th>Description</th>
                     <th>Type</th>
@@ -19,12 +19,20 @@
                 </tr>
             </thead>
             <tbody>
-                
                 <?php
                     $db= Database::connect();
-                    @$iduser = $_SESSION['idUtilisateur'];                    
-                    @$user= $db->prepare("SELECT * FROM  dangertable WHERE idOperateur=?");
-                    @$recupDanger=$user->execute([$iduser]);
+                    @$iduser = $_SESSION['idUtilisateur'];
+                    if ($_SESSION['typeUtilisateur'] == 'Super Administrateur') {
+                        @$user= $db->prepare("SELECT * FROM  dangertable");
+                    }else{
+                        @$user= $db->prepare("SELECT * FROM  dangertable WHERE idoperateur=?");
+                    }                  
+                    @$recupDanger= $user->execute([$iduser]);
+                    @$recuptdanger= $db->query("SELECT idTypeDanger,typeDanger FROM  typeDanger")->fetchAll();
+                    @$recupcdanger= $db->query("SELECT idCategorieDanger, nomCategorieDanger FROM  categorieDanger")->fetchAll();
+                    @$recupadanger= $db->query("SELECT idAuteur, nomAuteur FROM auteur")->fetchAll();
+                    @$recupldanger= $db->query("SELECT idLieu, nomLieu FROM lieu")->fetchAll();
+                    @$rnomb= $user->rowCount();
                     @$i=1;
                     foreach($user as $danger)
                     {
@@ -36,24 +44,50 @@
                         echo $danger['descriptionDanger'];
                         echo '</td>
                         <td>';
-                        echo $danger['typeDanger'];
+                        foreach($recuptdanger as $tdanger)
+                        {
+                            if ($danger['typeDanger'] == $tdanger['idTypeDanger']) {
+                                echo $tdanger['typeDanger'];
+                            }
+                        }
                         echo '</td>
                         <td>';
-                        echo $danger['categorieDanger'];
+                        foreach($recupcdanger as $cdanger)
+                        {
+                            if ($danger['categorieDanger'] == $cdanger['idCategorieDanger']) {
+                                echo $cdanger['nomCategorieDanger'];
+                            }
+                        }
                         echo '</td>
                         <td>';
-                        echo $danger['bourreauDanger'];
+                        foreach($recupadanger as $adanger)
+                        {
+                            if ($danger['bourreauDanger'] == $adanger['idAuteur']) {
+                                echo $adanger['nomAuteur'];
+                            }
+                        }
                         echo '</td>
                         <td>';
-                        echo $danger['victimeDanger'];
+                        foreach($recupadanger as $adanger)
+                        {
+                            if ($danger['victimeDanger'] == $adanger['idAuteur']) {
+                                echo $adanger['nomAuteur'];
+                            }
+                        }
                         echo '</td><td>';
                         echo $danger['dateDanger'];
                         echo '</td><td>';
+                        foreach($recupldanger as $ldanger)
+                        {
+                            if ($danger['lieu'] == $ldanger['idLieu']) {
+                                echo $ldanger['nomLieu'];
+                            }
+                        }
                         echo $danger['lieu'];
                         echo '</td><td>';
-                        echo '<em><a href="'.$danger['sourceDanger'].'">'.$danger['sourceDanger'].'<a></em>';
+                        echo '<em><a href="'.$danger['sourceDanger'].'" target="_blank">'.$danger['sourceDanger'].'<a></em>';
                         echo '</td><td>';
-                        echo '<a class=" ml-1" href="maj-danger.php?id='.$danger['idDanger'].'&operation=modification"><i class="fas fa-pen" aria-hidden="true"></i> </a>';
+                        echo '<a class=" ml-1" href="ajout-danger.php?id='.$danger['idDanger'].'&operation=modification"><i class="fas fa-pen" aria-hidden="true"></i> </a>';
                         echo '<a class="text-danger" data-toggle="modal" data-target="#exampleModalCenter'.$danger['idDanger'].'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
                       
                         echo '</td>
@@ -81,6 +115,7 @@
                          </div>
                         </div>';
                     }
+                    $db= Database::deconnect();
                 ?>
             </tbody>
         </table>

@@ -6,9 +6,9 @@
    var_dump($_POST);
    var_dump($_FILES["image"]["name"]);
    if (!empty($_POST)) {
-        $nomlieu          =checkInput($_POST['nomlieu']);
-        $descriptionlieu  =checkInput($_POST['descriptionlieu']);
-        $image            =checkInput($_FILES["image"]["name"]);
+        $nomlieu          =strip_tags($_POST['nomlieu']);
+        $descriptionlieu  =strip_tags($_POST['descriptionlieu']);
+        $image            =strip_tags($_FILES["image"]["name"]);
         $imagePath        = '../image/lieu/'. basename($image);
         $imageExtension   = pathinfo($imagePath,PATHINFO_EXTENSION);
         $isSuccess        = true;
@@ -67,9 +67,10 @@
                      'imagelieu'            =>$image ,
                      'ville'                =>$_POST['ville'],
                      'pays'                 =>$_POST['pays'],
-                     'dernieremodif'        => date("Y-m-d H:i:s")
+                     'dernieremodif'        => date("Y-m-d H:i:s"),
+                     'idUtilisateur'        => $_SESSION['idUtilisateur']
                  ];
-                $insertlieu = "INSERT INTO quartier (nomQuartier, descriptionQuatier, imageQuartier, dernieremodif, ville,pays) VALUES (:nomLieu,  :descriptionlieu, :imagelieu, :dernieremodif, :ville, :pays )";
+                $insertlieu = "INSERT INTO quartier (nomQuartier, descriptionQuatier, imageQuartier, dernieremodif, ville,pays,idUtilisateur) VALUES (:nomLieu,  :descriptionlieu, :imagelieu, :dernieremodif, :ville, :pays, :idUtilisateur)";
                 $resultat = $db->prepare($insertlieu)->execute($newlieu);
                 var_dump($resultat);
                 $newActivite = [

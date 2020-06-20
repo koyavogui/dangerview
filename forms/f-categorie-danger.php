@@ -37,14 +37,14 @@
                             <select name="tdanger" class="custom-select" required>
                             
                             <?php echo $_SESSION['echec']; $_SESSION['echec']="";  ?>" <?php  if (@$_GET['operation'] == 'modification') {
-                                    echo '<option value="' .$cdanger[2].'">' .$cdanger[2].'</option>';
+                                    echo '<option value="' .$cdanger[1].'">' .$cdanger[2].'</option>';
                                 } ?> 
                                 <?php
                                     $db=Database::connect();
                                     $recuptdanger = $db->query("SELECT * FROM typedanger ORDER BY typeDanger ASC");
                                     while ($tdanger = $recuptdanger->fetch()) 
                                     {
-                                        echo '<option value="'. $tdanger['typeDanger'] .'">'.$tdanger['typeDanger'] .'<option>';
+                                        echo '<option value="'. $tdanger['idTypeDanger'] .'">'.$tdanger['typeDanger'] .'</option>';
                                     }
                                 ?>
                             </select>
@@ -114,13 +114,13 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            Etes vous sur de vouloir supprimer  le type : '.$cDanger['nomCategorieDanger'].'?
+                                            Etes vous sur de vouloir supprimer  la categorie : '.$cDanger['nomCategorieDanger'].'?
                                         </div>
                                         <div class="modal-footer">
                                             <form class="form" action="delete.php" role="form" method="post">
                                                 <input type="hidden" name="id" value="'.$cDanger['nomCategorieDanger'].'"/>
                                                 <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Annuler</button>
-                                                <a href="traitement/delete-cdanger.php?id='.$cDanger['nomCategorieDanger'].'" class="btn btn-danger">Supprimer</a> 
+                                                <a href="traitement/delete-cdanger.php?id='.$cDanger['idCategorieDanger'].'" class="btn btn-danger">Supprimer</a> 
                                             </form>
                                         </div>
 
