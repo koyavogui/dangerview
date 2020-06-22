@@ -47,7 +47,7 @@
                             echo 'Féminin';
                         }
                         echo '</td><td>';
-                        echo '<a class="btn btn btn-outline-dark btn-sm ml-1" href="view-utilisateur.php?id=' .$user['idUtilisateur'] .'"><i class="fa fa-eye" aria-hidden="true"></i> Voir</a>';
+                        echo '<a class="btn btn btn-outline-dark btn-sm ml-1" href="view-utilisateur.php?id=' .$user['idUtilisateur'] .'&back=admin"><i class="fa fa-eye" aria-hidden="true"></i> Voir</a>';
                         if ($_SESSION['idUtilisateur'] == $user['idParent'] || $_SESSION['typeUtilisateur'] == 'Super Administrateur') {
                             echo '<a class="btn btn-outline-primary btn-sm ml-1" href="ajout-utilisateur.php?id='.$user['idUtilisateur'].'&operation=modification"><i class="fas fa-pen" aria-hidden="true"></i> Modifier</a>';
                             echo '<a class="btn btn-outline-danger btn-sm ml-1 text-danger" data-toggle="modal" data-target="#exampleModalCenter'.$user['idUtilisateur'].'"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer</a>';

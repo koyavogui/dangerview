@@ -25,4 +25,5 @@
     }
     
     Database::connect();
+    date_default_timezone_set("Africa/Abidjan");
 ?>

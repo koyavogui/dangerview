@@ -7,9 +7,9 @@
 
    if (!empty($_POST)) 
    {
-    $nom               = checkInput($_POST['nom']);
-    $prenom             = checkInput($_POST['prenom']); 
-    $image              = checkInput($_FILES["image"]["name"]);
+    $nom               = strip_tags($_POST['nom']);
+    $prenom             = strip_tags($_POST['prenom']); 
+    $image              = strip_tags($_FILES["image"]["name"]);
     $imagePath          = '../image/avatar/'. basename($image);
     $imageExtension     = pathinfo($imagePath,PATHINFO_EXTENSION);
     $isSuccess          = true;
@@ -44,14 +44,7 @@
             $isSuccess = false;
             $_SESSION['typeOpInvalid'] = "Veillez choisir un rôle s'il vous plait."; 
         }
-    if(empty($image)) 
-        {
-            echo "<br> image vide" ;
-            $_SESSION['errorImage'] = 'is-invalid';
-            $isSuccess = false;
-            $_SESSION['imageInvalid'] = "Veillez choisir une image s'il vous plait."; 
-        }
-        else
+    if(!empty($image)) 
         {
             $isUploadSuccess = true;
             if($imageExtension != "jpg" && $imageExtension != "png" && $imageExtension != "jpeg" && $imageExtension != "gif" ) 

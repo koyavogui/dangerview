@@ -8,16 +8,17 @@
                 <tr>
                     <th>N</th>
                     <th>Date d'activité</th>
-                    <th>Nom de l'activité</th>
-                    <th>Nom d'utilisateur</th>
-                    <th>Prénom de l'utilisateur</th>
+                    <th>Activité</th>
+                    <th>Utilisateur</th>
+                    <th>Rôle</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 
                 <?php
                     $db= Database::connect();
-                    $recupactivite= $db->query('SELECT activite.dateActivite, activite.nomActivite,user.nomUtilisateur AS nomUtilisateur, user.prenomUtilisateur AS prenomUtilisateur FROM activite RIGHT JOIN user ON activite.idUtilisateur=user.idUtilisateur ORDER BY activite.dateActivite DESC LIMIT 20');
+                    $recupactivite= $db->query('SELECT user.idUtilisateur, activite.dateActivite, activite.nomActivite,user.nomUtilisateur AS nomUtilisateur, user.prenomUtilisateur AS prenomUtilisateur, user.roleUtilisateur AS fonction FROM activite RIGHT JOIN user ON activite.idUtilisateur=user.idUtilisateur ORDER BY activite.dateActivite DESC LIMIT 20');
                     $i=1;
                     foreach ( $recupactivite as $activite)
                     {
@@ -28,9 +29,11 @@
                         echo '</td><td>';
                         echo $activite['nomActivite'];
                         echo '</td><td>';
-                        echo $activite['nomUtilisateur'];
+                        echo $activite['nomUtilisateur'].'  '.$activite['prenomUtilisateur'];
                         echo '</td><td>';
-                        echo $activite['prenomUtilisateur'];
+                        echo $activite['fonction'];
+                        echo '</td><td>';
+                        echo '<a class="btn btn btn-outline-dark btn-sm ml-1" href="view-utilisateur.php?id=' .$activite['idUtilisateur'] .'&back=superviseur"><i class="fa fa-eye" aria-hidden="true"></i> Voir</a>';
                         echo'</td></tr>';               
                     }
                 ?>

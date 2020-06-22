@@ -4,7 +4,8 @@
    require 'fonction/fonctionverif.php' ;
     if(!empty($_GET['id'])) 
     {
-        $id = checkInput($_GET['id']);
+        $id = strip_tags($_GET['id']);
+        $retour = strip_tags($_GET['back']);
          
     }    
     $db= Database::connect();
@@ -131,7 +132,21 @@
                 </form>
                 <br>
                 <div class="form-actions">
-                      <a class="btn btn-primary" href="list-utilisateur.php"><i class="fas fa-arrow-left" aria-hidden="true"></i> Retour</a>
+                      <a class="btn btn-primary" href="
+                      <?php
+                        switch ($retour) {
+                            case 'admin':
+                                echo 'list-utilisateur.php';
+                                break;
+                            case 'superviseur':
+                                echo 'dashboard-sup.php';
+                                break;
+                            default:
+                                echo 'index.php';
+                                break;
+                        }
+                      ?>
+                      "><i class="fas fa-arrow-left" aria-hidden="true"></i> Retour</a>
                 </div>
             </section>
             <section class="col-md">
